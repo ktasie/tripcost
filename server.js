@@ -23,9 +23,13 @@ app.post('/trip', async (req, res) => {
 
 // Route to display all trips.
 app.get('/trips', async (req, res) => {
-  const showAllTrips = await Trip.find();
-  // const showTrips = await showAllTrips.find();
-  res.send(showAllTrips);
+  try {
+    const showAllTrips = await Trip.find();
+
+    res.status(200).json({ trips: showAllTrips });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 app.post('/expense', (req, res) => {});
