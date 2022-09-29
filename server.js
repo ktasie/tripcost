@@ -3,8 +3,9 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
-//const { json } = require('body-parser');
+
 const Trip = require('./tripSchema');
+const Expense = require('./expenseSchema');
 
 //Middleware to receive json data
 app.use(express.json());
@@ -32,7 +33,24 @@ app.get('/trips', async (req, res) => {
   }
 });
 
-app.post('/expense', (req, res) => {});
+// Add an expense for a trip
+app.post('/expense', async (req, res) => {
+  try {
+    const { trip, date, amount, category, description } = req.body;
+
+    const expense = new Expense({
+      trip,
+      date,
+      amount,
+      category,
+      description,
+    });
+    await expense.save();
+    res.status(200).json({ ok: true });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 app.get('/expenses', (req, res) => {});
 
 app.listen(process.env.PORT, () => {
