@@ -51,8 +51,14 @@ app.post('/expense', async (req, res) => {
     res.status(500).json(err);
   }
 });
-app.get('/expenses', (req, res) => {});
 
+// List all expenses
+app.get('/expenses/:tripId', async (req, res) => {
+  const allExpense = await Expense.find({ trip: req.params.tripId });
+  res.status(200).json({ Trips: allExpense });
+});
+
+//Listen on webserver
 app.listen(process.env.PORT, () => {
   console.log(`App listening on port ${process.env.PORT}`);
 });
